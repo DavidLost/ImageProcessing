@@ -13,17 +13,17 @@ public class Main extends PApplet {
     }
 
     PImage image;
-    int pointCounter = 0;
+    int pointCounter;
     float[] x;
     float[] y;
-    float stroke = 0.6f;
-    float strokeFactor = 1.007f;
-    double pointsPerFrame = 25;
-    long totalPoints = 0;
-    int average = 0;
-    boolean mode = true;
-    boolean selected = false;
-    String fileName = "";
+    float stroke;
+    float strokeFactor;
+    double pointsPerFrame;
+    long totalPoints;
+    int average;
+    boolean mode;
+    boolean selected;
+    String fileName;
 
     public void settings() {
 
