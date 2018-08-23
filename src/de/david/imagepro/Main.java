@@ -143,21 +143,21 @@ public class Main extends PApplet {
 
     public void draw() {
 
-        if (totalPoints < 1500000) {
-            for (int i = 0; i < (int)pointsPerFrame; i++) {
-                float[] temp = getNextPoint();
-                float x = temp[0];
-                float y = temp[1];
-                float r = map(x+y, 0, image.width+image.height, 0, 255);
-                float g = map(x+y, 0, image.width+image.height, 255, 0);
-                float b = map(x+image.height-y, 0, image.width+image.height, 255, 0);
-                float rgoff = map(x+image.height-y, 0, image.width+image.height, -90, 115);
-                r += rgoff;
-                g += rgoff;
-                strokeWeight(stroke);
-                stroke(r, g, b);
-                point(x, y);
-            }
+        if (totalPoints > 1500000) return;
+
+        for (int i = 0; i < (int)pointsPerFrame; i++) {
+            float[] temp = getNextPoint();
+            float x = temp[0];
+            float y = temp[1];
+            float r = map(x+y, 0, image.width+image.height, 0, 255);
+            float g = map(x+y, 0, image.width+image.height, 255, 0);
+            float b = map(x+image.height-y, 0, image.width+image.height, 255, 0);
+            float rgoff = map(x+image.height-y, 0, image.width+image.height, -90, 115);
+            r += rgoff;
+            g += rgoff;
+            strokeWeight(stroke);
+            stroke(r, g, b);
+            point(x, y);
         }
         totalPoints += (int)pointsPerFrame;
         if (stroke < 2) {
