@@ -23,6 +23,7 @@ public class Main extends PApplet {
     int average;
     boolean mode;
     boolean selected;
+    boolean finished;
     String fileName;
 
     public void settings() {
@@ -47,7 +48,7 @@ public class Main extends PApplet {
         strokeFactor = 1.01f;
         pointsPerFrame = 25;
         totalPoints = 0;
-        println(mode);
+        finished = false;
         background(41);
         image = loadImage(fileName);
         int max = image.width*2 > image.height ? 0 : 1;
@@ -139,27 +140,40 @@ public class Main extends PApplet {
 
     public void draw() {
 
-        if (totalPoints > 1800000) return;
+        if (finished) return;
 
         for (int i = 0; i < (int)pointsPerFrame; i++) {
             float[] temp = getNextPoint();
-            float x = temp[0];
-            float y = temp[1];
-            float r = map(x+y, 0, image.width+image.height, 0, 255);
-            float g = map(x+y, 0, image.width+image.height, 255, 0);
-            float b = map(x+image.height-y, 0, image.width+image.height, 255, 0);
-            float rgoff = map(x+image.height-y, 0, image.width+image.height, -90, 115);
-            r += rgoff;
-            g += rgoff;
-            strokeWeight(stroke);
-            stroke(r, g, b);
-            point(x, y);
+            drawPoint(temp[0], temp[1]);
         }
         totalPoints += (int)pointsPerFrame;
-        if (stroke < 1.5) {
+        if (stroke < 1.6) {
             stroke *= strokeFactor;
         }
         pointsPerFrame *= 1.02;
+        if (pointsPerFrame > 10000) {
+            fastFill();
+            finished = true;
+        }
+    }
+
+    void drawPoint(float x, float y) {
+
+        float r = map(x+y, 0, image.width+image.height, 0, 255);
+        float g = map(x+y, 0, image.width+image.height, 255, 0);
+        float b = map(x+image.height-y, 0, image.width+image.height, 255, 0);
+        float rgoff = map(x+image.height-y, 0, image.width+image.height, -90, 110);
+        r += rgoff;
+        g += rgoff;
+        strokeWeight(stroke);
+        stroke(r, g, b);
+        point(x, y);
+    }
+
+    void fastFill() {
+        for (int i = 0; i < x.length; i++) {
+            drawPoint(x[i], y[i]);
+        }
     }
 
     float getRGBAverage(int col) {
