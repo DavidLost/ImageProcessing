@@ -77,11 +77,7 @@ public class Main extends PApplet {
         for (int x = 0; x < image.width; x++) {
             for (int y = 0; y < image.height; y++) {
                 int index = getIndex(x, y, image.width);
-                int col = image.pixels[index];
-                float r = red(col);
-                float g = green(col);
-                float b = blue(col);
-                total += (r+g+b)/3;
+                total += getRGBAverage(image.pixels[index]);
             }
         }
         return total / (image.width*image.height);
@@ -99,10 +95,10 @@ public class Main extends PApplet {
         for (int x = 0; x < image.width; x++) {
             for (int y = 0; y < image.height; y++) {
                 int index = getIndex(x, y, image.width);
-                if (red(image.pixels[index]) < average && mode) {
+                if (getRGBAverage(image.pixels[index]) < average && mode) {
                     pointCounter++;
                 }
-                if (red(image.pixels[index]) > average && !mode) {
+                else if (getRGBAverage(image.pixels[index]) > average && !mode) {
                     pointCounter++;
                 }
             }
@@ -117,12 +113,12 @@ public class Main extends PApplet {
         for (int x = 0; x < image.width; x++) {
             for (int y = 0; y < image.height; y++) {
                 int index = getIndex(x, y, image.width);
-                if (red(image.pixels[index]) < average && mode) {
+                if (getRGBAverage(image.pixels[index]) < average && mode) {
                     this.x[counter] = x;
                     this.y[counter] = y;
                     counter++;
                 }
-                if (red(image.pixels[index]) > average && !mode) {
+                if (getRGBAverage(image.pixels[index]) > average && !mode) {
                     this.x[counter] = x;
                     this.y[counter] = y;
                     counter++;
@@ -143,7 +139,7 @@ public class Main extends PApplet {
 
     public void draw() {
 
-        if (totalPoints > 1500000) return;
+        if (totalPoints > 1800000) return;
 
         for (int i = 0; i < (int)pointsPerFrame; i++) {
             float[] temp = getNextPoint();
@@ -160,10 +156,14 @@ public class Main extends PApplet {
             point(x, y);
         }
         totalPoints += (int)pointsPerFrame;
-        if (stroke < 2) {
+        if (stroke < 1.5) {
             stroke *= strokeFactor;
         }
         pointsPerFrame *= 1.02;
+    }
+
+    float getRGBAverage(int col) {
+        return (red(col)+green(col)+blue(col))/3f;
     }
 
 }
